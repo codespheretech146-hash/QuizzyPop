@@ -1,0 +1,1349 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8f6ff">
+<meta name="description" content="Play funny personality quizzes, friendship games and brain challenges on QuizzyPop!">
+<title>QuizzyPop — Funny Quiz &amp; Personality Lab</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+:root {
+  --purple:#7357ff;
+  --purple-dark:#4933ba;
+  --pink:#ff83bd;
+  --yellow:#ffda67;
+  --mint:#8debd1;
+  --bg:#f8f6ff;
+  --ink:#292346;
+  --muted:#77738e;
+  --white:#fff;
+  --shadow:0 10px 30px rgba(83,65,150,.10);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:'Nunito',sans-serif;overflow-x:hidden;
+}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{
+  outline:3px solid var(--purple);outline-offset:4px;
+}
+button:disabled{opacity:.45;cursor:not-allowed}
+h1,h2,h3,.brand{font-family:'Fredoka',sans-serif}
+a{color:inherit}
+.hidden{display:none!important}
+.container{width:min(1120px,92%);margin:auto}
+
+.topbar{
+  position:sticky;top:0;z-index:20;
+  background:rgba(248,246,255,.94);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid #ece7ff;
+}
+.nav{
+  min-height:70px;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;
+}
+.brand{
+  display:flex;align-items:center;gap:8px;
+  font-size:27px;font-weight:700;letter-spacing:-.8px;
+  text-decoration:none;white-space:nowrap;
+}
+.brand-mark{
+  display:grid;place-items:center;width:39px;height:39px;
+  background:var(--yellow);border-radius:14px;
+  transform:rotate(-7deg);font-size:23px;
+}
+.nav-actions{display:flex;align-items:center;gap:8px}
+.icon-btn{
+  border:0;background:white;border-radius:14px;
+  width:43px;height:43px;font-size:19px;
+  box-shadow:0 4px 12px #51408010;
+}
+.small-btn{
+  border:0;border-radius:14px;background:#eee9ff;
+  padding:12px 15px;font-weight:900;color:var(--purple-dark);
+}
+
+.hero{position:relative;overflow:hidden;padding:50px 0 36px}
+.hero-grid{
+  display:grid;grid-template-columns:1.2fr .8fr;
+  align-items:center;gap:28px;min-height:310px;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 13px;border-radius:30px;
+  background:#ece7ff;color:var(--purple-dark);
+  font-size:12px;font-weight:900;letter-spacing:.7px;
+  text-transform:uppercase;
+}
+.hero h1{
+  font-size:clamp(43px,7vw,76px);line-height:.99;
+  margin:20px 0 16px;letter-spacing:-2px;
+}
+.hero h1 span{color:var(--purple)}
+.hero p{
+  max-width:480px;color:var(--muted);
+  line-height:1.8;font-weight:700;
+}
+.primary-btn{
+  border:0;background:var(--purple);color:white;
+  padding:15px 22px;border-radius:17px;
+  font-weight:900;box-shadow:0 7px 0 #5139c8;
+  transition:transform .18s,box-shadow .18s;
+}
+.primary-btn:hover{
+  transform:translateY(-3px);box-shadow:0 10px 0 #5139c8;
+}
+.primary-btn:active{
+  transform:translateY(3px);box-shadow:0 3px 0 #5139c8;
+}
+.secondary-btn{
+  border:2px solid #e7e0ff;background:white;
+  padding:13px 18px;border-radius:16px;
+  font-weight:900;color:var(--ink);
+}
+.hero-actions{display:flex;gap:13px;flex-wrap:wrap;margin-top:25px}
+.hero-art{
+  min-height:280px;display:grid;place-items:center;
+  position:relative;background:linear-gradient(140deg,#e7dfff,#ffdcef);
+  border-radius:46% 54% 44% 56% / 53% 41% 59% 47%;
+}
+.mascot{
+  width:155px;height:155px;background:var(--purple);
+  border-radius:45% 55% 48% 52% / 53% 44% 56% 47%;
+  position:relative;display:flex;justify-content:center;gap:24px;
+  align-items:center;box-shadow:inset -12px -13px 0 #00000013;
+  animation:float 3.4s ease-in-out infinite;
+}
+.mascot:before,.mascot:after{
+  content:"";position:absolute;top:-13px;width:38px;height:42px;
+  background:var(--purple);border-radius:70% 30% 20% 30%;
+}
+.mascot:before{left:19px;transform:rotate(-22deg)}
+.mascot:after{right:19px;transform:rotate(22deg)}
+.eye{
+  width:19px;height:24px;background:white;border-radius:50%;
+  position:relative;z-index:1;margin-top:-15px;
+}
+.eye:after{
+  content:"";position:absolute;top:7px;left:6px;
+  width:7px;height:10px;background:#292346;border-radius:50%;
+}
+.mouth{
+  position:absolute;top:87px;width:30px;height:15px;
+  border-bottom:5px solid white;border-radius:0 0 50% 50%;
+}
+.cheek{
+  position:absolute;top:84px;width:20px;height:11px;
+  background:#ff9ccf;border-radius:50%;
+}
+.cheek.left{left:20px}
+.cheek.right{right:20px}
+.mascot-art-label{
+  position:absolute;bottom:18px;left:0;right:0;
+  text-align:center;font-weight:900;color:#4933ba;font-size:13px;
+}
+.float-sticker{
+  position:absolute;font-size:34px;
+  animation:wiggle 3s ease-in-out infinite;
+}
+.sticker-one{top:22px;left:25px}
+.sticker-two{top:40px;right:25px;animation-delay:.5s}
+.sticker-three{bottom:40px;left:25px;animation-delay:1s}
+.sticker-four{bottom:35px;right:30px;animation-delay:.7s}
+
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-12px) rotate(4deg)}
+}
+@keyframes wiggle{
+  0%,100%{transform:rotate(-8deg) scale(1)}
+  50%{transform:rotate(9deg) scale(1.12)}
+}
+@keyframes pop{
+  0%{transform:scale(.75);opacity:0}
+  100%{transform:scale(1);opacity:1}
+}
+@keyframes confettiFall{
+  to{transform:translateY(110vh) rotate(720deg);opacity:.1}
+}
+
+section{padding:28px 0 42px}
+.section-head{
+  display:flex;align-items:end;justify-content:space-between;
+  gap:15px;margin-bottom:22px;
+}
+.section-head h2{font-size:clamp(26px,4vw,36px);margin:0 0 5px}
+.section-head p{margin:0;color:var(--muted);font-weight:700}
+.tag{
+  display:inline-block;background:#fff2c7;color:#73531b;
+  border-radius:30px;padding:7px 11px;
+  font-size:11px;font-weight:900;
+}
+.ad-slot{
+  border:2px dashed #d9d0f4;border-radius:18px;
+  min-height:78px;display:flex;align-items:center;
+  justify-content:center;text-align:center;padding:14px;
+  margin:14px auto 24px;color:#9991b7;
+  font-size:12px;font-weight:900;letter-spacing:.5px;
+  background:rgba(255,255,255,.5);
+}
+.ad-slot span{display:block;line-height:1.7}
+
+.quiz-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;
+}
+.quiz-card{
+  border:2px solid transparent;background:white;border-radius:24px;
+  padding:21px;text-align:left;min-width:0;
+  box-shadow:var(--shadow);transition:transform .2s,border-color .2s;
+  display:flex;flex-direction:column;align-items:flex-start;
+}
+.quiz-card:hover{transform:translateY(-5px);border-color:#d8ceff}
+.card-emoji{
+  width:62px;height:62px;border-radius:20px;
+  display:grid;place-items:center;font-size:34px;margin-bottom:17px;
+}
+.card-emoji.pink{background:#ffe2f0}
+.card-emoji.yellow{background:#fff1be}
+.card-emoji.mint{background:#d8fff3}
+.card-emoji.purple{background:#ece5ff}
+.card-emoji.blue{background:#dff1ff}
+.quiz-card h3{font-size:22px;margin:0 0 8px}
+.quiz-card p{
+  color:var(--muted);font-weight:700;font-size:13px;
+  line-height:1.65;margin:0 0 16px;
+}
+.card-bottom{
+  margin-top:auto;width:100%;display:flex;
+  justify-content:space-between;align-items:center;gap:5px;
+}
+.card-time{font-size:11px;font-weight:900;color:#8b83a9}
+.card-arrow{
+  background:#f0ebff;color:var(--purple);
+  border-radius:12px;padding:8px 12px;font-weight:900;
+}
+.daily-banner{
+  background:linear-gradient(110deg,#ffedb2,#ffdce9);
+  border-radius:28px;padding:25px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.daily-banner h2{font-size:28px;margin:8px 0}
+.daily-banner p{line-height:1.7;font-weight:700;color:#66536d;margin:0}
+.daily-icon{font-size:62px;animation:float 3s infinite}
+.daily-banner .primary-btn{
+  background:#292346;box-shadow:0 6px 0 #17122c;white-space:nowrap;
+}
+.daily-banner .primary-btn:hover{box-shadow:0 9px 0 #17122c}
+.feature-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.feature{
+  background:white;border-radius:20px;padding:20px;box-shadow:var(--shadow);
+}
+.feature b{display:block;margin:8px 0}
+.feature p{font-size:13px;line-height:1.7;color:var(--muted);margin:0}
+
+footer{
+  border-top:1px solid #e9e2fb;padding:27px 0 38px;
+  text-align:center;color:var(--muted);font-size:12px;line-height:1.8;
+}
+footer .brand{justify-content:center;margin-bottom:8px;color:var(--ink)}
+
+/* Quiz window */
+.modal-backdrop{
+  position:fixed;inset:0;z-index:50;background:#292346a8;
+  display:flex;align-items:center;justify-content:center;
+  padding:14px;overflow-y:auto;
+}
+.quiz-modal{
+  background:var(--bg);width:min(620px,100%);max-height:94dvh;
+  overflow-y:auto;border-radius:28px;padding:24px;
+  position:relative;animation:pop .25s ease;
+  box-shadow:0 20px 80px #17122c55;
+}
+.modal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.modal-top h2{font-size:21px;margin:0}
+.close-btn{
+  width:39px;height:39px;border:0;border-radius:13px;
+  background:white;font-size:21px;color:var(--ink);
+}
+.progress-wrap{
+  height:9px;background:#e6e0f6;border-radius:20px;
+  margin:20px 0 8px;overflow:hidden;
+}
+.progress-bar{
+  height:100%;width:0;
+  background:linear-gradient(90deg,#7357ff,#ff83bd);
+  border-radius:20px;transition:width .3s;
+}
+.question-meta{
+  display:flex;justify-content:space-between;gap:10px;
+  color:var(--muted);font-size:12px;font-weight:900;
+}
+.question-text{
+  font-size:clamp(23px,5vw,31px);line-height:1.2;margin:20px 0;
+}
+.answer-list{display:grid;gap:11px}
+.answer-option{
+  border:2px solid #e8e1fa;background:white;color:var(--ink);
+  border-radius:17px;padding:15px;text-align:left;font-weight:800;
+  display:flex;align-items:center;gap:12px;transition:.15s;
+}
+.answer-option:hover{border-color:#b7a7ff;transform:translateX(3px)}
+.answer-option.selected{
+  background:#eee9ff;border-color:var(--purple);color:var(--purple-dark);
+}
+.answer-letter{
+  width:34px;height:34px;display:grid;place-items:center;
+  flex-shrink:0;background:#f4f0ff;border-radius:11px;font-weight:900;
+}
+.quiz-footer{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+.quiz-footer .primary-btn{flex:1}
+.result-box{text-align:center;padding:18px 2px 4px;animation:pop .35s ease}
+.result-emoji{font-size:77px;display:block;animation:float 2.8s infinite}
+.result-kicker{font-size:11px;letter-spacing:1.5px;font-weight:900;color:var(--purple)}
+.result-title{font-size:clamp(31px,7vw,43px);margin:8px 0}
+.result-description{
+  color:var(--muted);font-weight:700;line-height:1.8;
+  max-width:430px;margin:0 auto 18px;
+}
+.result-stat{
+  display:inline-block;background:white;padding:12px 17px;
+  border-radius:16px;margin:0 0 18px;font-weight:900;color:var(--purple-dark);
+}
+.result-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.score-line{font-size:13px;color:var(--muted);font-weight:900;margin-top:18px}
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:#292346;color:white;padding:13px 18px;border-radius:14px;
+  font-weight:800;font-size:13px;z-index:100;
+  box-shadow:var(--shadow);max-width:90%;text-align:center;
+}
+.confetti-piece{
+  position:fixed;top:-20px;z-index:80;width:9px;height:15px;
+  animation:confettiFall 2.6s linear forwards;pointer-events:none;
+}
+
+@media(max-width:720px){
+  .hero{padding-top:31px}
+  .hero-grid{grid-template-columns:1fr;gap:28px}
+  .hero-copy{text-align:center}
+  .hero-copy p{margin-inline:auto}
+  .hero-actions{justify-content:center}
+  .hero-art{min-height:245px;max-width:440px;width:100%;margin:auto}
+  .mascot{width:132px;height:132px}
+  .mouth{top:75px}
+  .cheek{top:72px}
+  .quiz-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .quiz-card{padding:15px;border-radius:20px}
+  .quiz-card h3{font-size:19px}
+  .card-emoji{width:54px;height:54px;font-size:29px}
+  .daily-banner{padding:20px;align-items:flex-start}
+  .daily-icon{font-size:45px}
+  .daily-banner h2{font-size:23px}
+  .feature-strip{grid-template-columns:1fr}
+}
+@media(max-width:380px){
+  .brand{font-size:23px}
+  .nav{min-height:62px}
+  .small-btn{padding:10px}
+  .quiz-grid{grid-template-columns:1fr}
+  .quiz-card{display:grid;grid-template-columns:56px 1fr;column-gap:12px}
+  .card-emoji{grid-row:1 / span 3;margin:0}
+  .quiz-card h3{align-self:end}
+  .quiz-card p{margin-bottom:9px}
+  .card-bottom{grid-column:2}
+  .daily-banner{flex-direction:column}
+  .quiz-modal{padding:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    scroll-behavior:auto!important;transition-duration:.01ms!important;
+  }
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <nav class="nav container">
+    <a href="#" class="brand" aria-label="QuizzyPop home">
+      <span class="brand-mark">✨</span> QuizzyPop
+    </a>
+    <div class="nav-actions">
+      <button class="small-btn" id="scoresBtn" type="button">
+        🏆 <span id="bestScore">0</span>
+      </button>
+      <button class="icon-btn" id="soundBtn" type="button"
+        aria-label="Turn sound off" title="Toggle sound">🔊</button>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">🎉 Your daily dose of fun</span>
+        <h1>Play a quiz.<br>Find your <span>vibe!</span></h1>
+        <p>Discover your funny personality, test your friendship energy, and challenge your brain. Serious fun, zero boring stuff!</p>
+        <div class="hero-actions">
+          <button class="primary-btn" type="button" onclick="scrollToQuizzes()">Let's Play! →</button>
+          <button class="secondary-btn" type="button" onclick="startQuiz('brain')">🧠 Brain warm-up</button>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-label="QuizzyPop's purple cartoon mascot">
+        <span class="float-sticker sticker-one">⭐</span>
+        <span class="float-sticker sticker-two">💖</span>
+        <span class="float-sticker sticker-three">⚡</span>
+        <span class="float-sticker sticker-four">🎈</span>
+        <div class="mascot" aria-hidden="true">
+          <span class="eye"></span><span class="eye"></span>
+          <span class="cheek left"></span><span class="cheek right"></span>
+          <span class="mouth"></span>
+        </div>
+        <div class="mascot-art-label">Meet Pop! Your quiz buddy.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="ad-slot" aria-label="Future advertisement placement">
+      <span>ADVERTISEMENT SPACE<br>Future placement — add approved ad code here</span>
+    </div>
+  </div>
+
+  <section id="quizzes">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Pick your fun! 🎮</h2>
+          <p>Choose a game and reveal your result.</p>
+        </div>
+        <span class="tag">100% FOR FUN</span>
+      </div>
+
+      <div class="quiz-grid">
+        <button class="quiz-card" type="button" onclick="startQuiz('personality')">
+          <span class="card-emoji pink">🦄</span>
+          <h3>Your Vibe Check</h3>
+          <p>Are you the chill panda or the chaotic unicorn? Find your vibe!</p>
+          <span class="card-bottom"><span class="card-time">5 QUESTIONS · 2 MIN</span><span class="card-arrow">→</span></span>
+        </button>
+
+        <button class="quiz-card" type="button" onclick="startQuiz('friendship')">
+          <span class="card-emoji yellow">👯</span>
+          <h3>Friendship Energy</h3>
+          <p>Discover your friend-group role, from the comedian to the planner.</p>
+          <span class="card-bottom"><span class="card-time">5 QUESTIONS · 2 MIN</span><span class="card-arrow">→</span></span>
+        </button>
+
+        <button class="quiz-card" type="button" onclick="startQuiz('brain')">
+          <span class="card-emoji mint">🧠</span>
+          <h3>Brain Bounce</h3>
+          <p>Five quick riddles to wake up those brain cells. Ready?</p>
+          <span class="card-bottom"><span class="card-time">5 QUESTIONS · 2 MIN</span><span class="card-arrow">→</span></span>
+        </button>
+
+        <button class="quiz-card" type="button" onclick="startQuiz('chaos')">
+          <span class="card-emoji purple">🌪️</span>
+          <h3>Chaos Meter</h3>
+          <p>Measure your imaginary chaos level with totally silly choices.</p>
+          <span class="card-bottom"><span class="card-time">5 QUESTIONS · 2 MIN</span><span class="card-arrow">→</span></span>
+        </button>
+
+        <button class="quiz-card" type="button" onclick="startQuiz('snack')">
+          <span class="card-emoji blue">🍕</span>
+          <h3>Snack Personality</h3>
+          <p>Which snack matches your energy? Sweet, spicy, or legendary?</p>
+          <span class="card-bottom"><span class="card-time">5 QUESTIONS · 2 MIN</span><span class="card-arrow">→</span></span>
+        </button>
+
+        <button class="quiz-card" type="button" onclick="startQuiz('daily')">
+          <span class="card-emoji yellow">🌟</span>
+          <h3>Daily Pop Quiz</h3>
+          <p>A date-based daily brain challenge. Come back tomorrow!</p>
+          <span class="card-bottom"><span class="card-time">5 QUESTIONS · DAILY</span><span class="card-arrow">→</span></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section id="daily">
+    <div class="container">
+      <div class="daily-banner">
+        <div>
+          <span class="tag">🌈 TODAY'S SPECIAL</span>
+          <h2 id="dailyTitle">The Daily Pop Challenge</h2>
+          <p id="dailyDescription">Five quick questions. One fresh challenge for today.</p>
+          <p style="margin-top:8px;font-size:12px" id="dailyStatus">Your daily completion is saved on this device.</p>
+          <button class="primary-btn" style="margin-top:18px" type="button" onclick="startQuiz('daily')">Take today's challenge →</button>
+        </div>
+        <div class="daily-icon" aria-hidden="true">🎯</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="ad-slot" aria-label="Future advertisement placement">
+      <span>ADVERTISEMENT SPACE<br>Reserved for a future approved advertising unit</span>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Why QuizzyPop? 💜</h2>
+          <p>Little games, big laughs.</p>
+        </div>
+      </div>
+      <div class="feature-strip">
+        <div class="feature">
+          <span style="font-size:29px">🎨</span>
+          <b>Cartoon fun</b>
+          <p>Pastel colors, playful animations, and a friendly mascot make every visit feel lively.</p>
+        </div>
+        <div class="feature">
+          <span style="font-size:29px">📱</span>
+          <b>Share the laughs</b>
+          <p>Share your result with friends using your device's share menu or copy it as text.</p>
+        </div>
+        <div class="feature">
+          <span style="font-size:29px">💾</span>
+          <b>Your local records</b>
+          <p>Your best brain score and daily completion stay in your browser on this device.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="brand"><span class="brand-mark">✨</span> QuizzyPop</div>
+    <div>Play a quiz. Discover your vibe. Make your friends laugh.</div>
+    <p>All personality results are just-for-fun entertainment, not scientific assessments.</p>
+    <p>© <span id="year"></span> QuizzyPop · Made for fun.</p>
+  </div>
+</footer>
+
+<div class="modal-backdrop hidden" id="quizBackdrop"
+  role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="quiz-modal">
+    <div class="modal-top">
+      <h2 id="modalTitle">Let's play!</h2>
+      <button class="close-btn" type="button" onclick="closeQuiz()" aria-label="Close quiz">×</button>
+    </div>
+    <div id="quizContent"></div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+
+/* -------------------- RESULTS -------------------- */
+
+const personalityResults = [
+  {
+    name:"The Sunshine Potato",emoji:"🥔",
+    desc:"You bring cozy, happy energy wherever you go. Your superpower is making ordinary moments feel special. Your weakness? A comfy seat and snacks."
+  },
+  {
+    name:"The Chaos Unicorn",emoji:"🦄",
+    desc:"Your imagination has no speed limit. You turn little moments into big stories and somehow make the unexpected entertaining."
+  },
+  {
+    name:"The Chill Panda",emoji:"🐼",
+    desc:"Calm, thoughtful, and a professional avoider of unnecessary drama. You believe peace, good vibes, and a little nap solve many things."
+  },
+  {
+    name:"The Sparkly Genius",emoji:"🧠",
+    desc:"Your mind is always connecting random dots. You ask interesting questions, notice tiny details, and can turn a weird idea into a whole adventure."
+  }
+];
+
+const friendshipResults = [
+  {
+    name:"The Meme Machine",emoji:"😂",
+    desc:"You deliver the jokes, the reactions, and the perfectly timed nonsense. Group chats would be suspiciously quiet without you."
+  },
+  {
+    name:"The Loyal Legend",emoji:"🛡️",
+    desc:"You're the dependable one who shows up and listens. Your friendship superpower is making people feel included."
+  },
+  {
+    name:"The Adventure Button",emoji:"🚀",
+    desc:"You turn 'what should we do?' into an actual plan. Your friends may need a minute to keep up with your ideas."
+  },
+  {
+    name:"The Secret Strategist",emoji:"🕵️",
+    desc:"You notice the details, remember the plans, and quietly keep the group organized. Sneaky levels of helpfulness."
+  }
+];
+
+const chaosResults = [
+  {
+    name:"Tiny Sprinkle",emoji:"🫧",
+    desc:"Your chaos is gentle and mostly limited to putting things in the wrong place. Your vibe is 90% peaceful cloud."
+  },
+  {
+    name:"Certified Goofball",emoji:"🤪",
+    desc:"You add a little randomness to every situation. Nothing is truly boring when you're around."
+  },
+  {
+    name:"Plot Twist Professional",emoji:"🎭",
+    desc:"Your brain has surprise endings. Plans change, jokes appear, and somehow it all becomes a story."
+  },
+  {
+    name:"Legendary Tornado",emoji:"🌪️",
+    desc:"Your imaginary chaos rating is sky-high. You are a walking plot twist with unlimited cartoon energy."
+  }
+];
+
+const snackResults = [
+  {
+    name:"The Cozy Cookie",emoji:"🍪",
+    desc:"Warm, welcoming, and a little bit sweet. You enjoy comfortable vibes and making people smile."
+  },
+  {
+    name:"The Spicy Nacho",emoji:"🌶️",
+    desc:"Bold opinions, quick reactions, and plenty of flavor. You bring energy to the party."
+  },
+  {
+    name:"The Popcorn Star",emoji:"🍿",
+    desc:"Curious, playful, and always ready for the next episode. Life around you rarely stays predictable."
+  },
+  {
+    name:"The Pizza Legend",emoji:"🍕",
+    desc:"Reliable, loved, and ready for almost any situation. You have main-character snack energy."
+  }
+];
+
+/* -------------------- PERSONALITY QUESTIONS -------------------- */
+
+const personalityQuestions = [
+  {q:"Your perfect free afternoon looks like…",a:[
+    ["A blanket and snacks",0],
+    ["A spontaneous adventure",1],
+    ["A peaceful walk",2],
+    ["Trying a new puzzle",3]
+  ]},
+  {q:"Your friends would describe you as…",a:[
+    ["Warm and funny",0],
+    ["Unpredictable in a fun way",1],
+    ["Calm and thoughtful",2],
+    ["Curious and clever",3]
+  ]},
+  {q:"Pick a magical power!",a:[
+    ["Make everyone smile",0],
+    ["Turn any day into an adventure",1],
+    ["Pause the world for a rest",2],
+    ["Understand every mystery",3]
+  ]},
+  {q:"When plans suddenly change, you…",a:[
+    ["Find a comfy alternative",0],
+    ["Say 'LET'S DO IT!'",1],
+    ["Stay cool and adapt",2],
+    ["Work out a new plan",3]
+  ]},
+  {q:"Choose your mascot companion.",a:[
+    ["A happy little potato",0],
+    ["A glittery unicorn",1],
+    ["A sleepy panda",2],
+    ["A tiny robot",3]
+  ]}
+];
+
+/* -------------------- FRIENDSHIP QUESTIONS -------------------- */
+
+const friendshipQuestions = [
+  {q:"The group chat is silent. You…",a:[
+    ["Send a ridiculous meme",0],
+    ["Check if everyone is okay",1],
+    ["Suggest a fun outing",2],
+    ["Ask about the weekend plan",3]
+  ]},
+  {q:"A friend has a difficult day. You…",a:[
+    ["Try to make them laugh",0],
+    ["Listen and support them",1],
+    ["Invite them somewhere fun",2],
+    ["Help them figure out a solution",3]
+  ]},
+  {q:"Pick a group activity.",a:[
+    ["A meme contest",0],
+    ["A cozy hangout",1],
+    ["An outdoor adventure",2],
+    ["A carefully planned game night",3]
+  ]},
+  {q:"Someone forgets the plan. You…",a:[
+    ["Make a joke about it",0],
+    ["Make sure nobody feels bad",1],
+    ["Suggest a new activity",2],
+    ["Send the updated details",3]
+  ]},
+  {q:"Your best group superpower is…",a:[
+    ["Making everyone laugh",0],
+    ["Being there for people",1],
+    ["Getting everyone moving",2],
+    ["Keeping things organized",3]
+  ]}
+];
+
+/* -------------------- CHAOS QUESTIONS -------------------- */
+
+const chaosQuestions = [
+  {q:"You walk into a room and forget why. You…",a:[
+    ["Leave peacefully",0],
+    ["Make up a dramatic story",2],
+    ["Check every pocket",1],
+    ["Declare a side quest",3]
+  ]},
+  {q:"Pick a completely normal object to be your assistant.",a:[
+    ["A polite pillow",0],
+    ["A dancing spoon",2],
+    ["A suspicious sock",1],
+    ["A tiny megaphone",3]
+  ]},
+  {q:"Your imaginary warning label says…",a:[
+    ["May nap unexpectedly",0],
+    ["Contains surprise jokes",1],
+    ["Might invent a new plan",2],
+    ["Approach with confetti",3]
+  ]},
+  {q:"The elevator music starts. You…",a:[
+    ["Enjoy the peaceful moment",0],
+    ["Invent lyrics",1],
+    ["Imagine a music video",2],
+    ["Start an imaginary concert",3]
+  ]},
+  {q:"Your cartoon entrance includes…",a:[
+    ["A gentle wave",0],
+    ["A dramatic spin",2],
+    ["A silly sound effect",1],
+    ["An explosion of glitter",3]
+  ]}
+];
+
+/* -------------------- SNACK QUESTIONS -------------------- */
+
+const snackQuestions = [
+  {q:"Choose a weekend mood.",a:[
+    ["Cozy and sweet",0],
+    ["Bold and spicy",1],
+    ["Curious and crunchy",2],
+    ["Classic and satisfying",3]
+  ]},
+  {q:"Pick a party role.",a:[
+    ["The friendly host",0],
+    ["The energetic dancer",1],
+    ["The story collector",2],
+    ["The reliable helper",3]
+  ]},
+  {q:"Choose a superpower.",a:[
+    ["Make people feel welcome",0],
+    ["Add excitement anywhere",1],
+    ["Discover hidden things",2],
+    ["Fix any small problem",3]
+  ]},
+  {q:"Your dream cartoon world is…",a:[
+    ["A cozy bakery",0],
+    ["A volcano made of chili",1],
+    ["A popcorn planet",2],
+    ["A giant pizza castle",3]
+  ]},
+  {q:"Pick a compliment.",a:[
+    ["You're so sweet!",0],
+    ["You have amazing energy!",1],
+    ["You're so interesting!",2],
+    ["You're always dependable!",3]
+  ]}
+];
+
+/* -------------------- BRAIN QUESTION SETS -------------------- */
+
+const brainSets = [
+  [
+    {q:"What has hands but cannot clap?",a:["A clock","A monkey","A tree","A glove"],correct:0,why:"A clock has hour and minute hands, but it cannot clap."},
+    {q:"What gets wetter as it dries?",a:["A towel","The sun","A candle","A book"],correct:0,why:"A towel absorbs water while drying something else."},
+    {q:"How many months have at least 28 days?",a:["1","2","6","12"],correct:3,why:"All 12 months have at least 28 days."},
+    {q:"What has a neck but no head?",a:["A bottle","A shoe","A chair","A cloud"],correct:0,why:"A bottle has a neck but no head."},
+    {q:"You have 3 apples and take away 2. How many did you take?",a:["1","2","3","5"],correct:1,why:"You took away two apples, so you have taken two."}
+  ],
+  [
+    {q:"What has keys but cannot open a lock?",a:["A piano","A door","A suitcase","A map"],correct:0,why:"A piano has musical keys, not keys for locks."},
+    {q:"Which number comes next: 2, 4, 6, 8, …?",a:["9","10","12","16"],correct:1,why:"The sequence increases by 2 each time, so 10 comes next."},
+    {q:"What has one eye but cannot see?",a:["A needle","A cat","A camera","A potato"],correct:0,why:"A needle has an eye, which is the hole for thread."},
+    {q:"If you have 4 pairs of socks, how many socks is that?",a:["4","6","8","12"],correct:2,why:"Each pair contains two socks, so 4 × 2 = 8."},
+    {q:"What can travel around the world while staying in one corner?",a:["A stamp","A bicycle","A cloud","A suitcase"],correct:0,why:"A stamp can stay in the corner of a letter as it travels."}
+  ],
+  [
+    {q:"Which is heavier: 1 kg of cotton or 1 kg of iron?",a:["Cotton","Iron","They weigh the same","It depends on color"],correct:2,why:"Both have a mass of exactly one kilogram."},
+    {q:"What has many teeth but cannot bite?",a:["A comb","A tiger","A shark","A zipper pull"],correct:0,why:"A comb has teeth used to arrange hair."},
+    {q:"What comes once in a minute, twice in a moment, but never in a thousand years?",a:["The letter M","The letter A","The number 1","The letter T"],correct:0,why:"The letter M appears once in 'minute', twice in 'moment', and not in 'a thousand years'."},
+    {q:"A dozen eggs means how many eggs?",a:["10","11","12","24"],correct:2,why:"One dozen is equal to 12 items."},
+    {q:"You pass the person in second place in a race. What place are you in?",a:["First","Second","Third","Fourth"],correct:1,why:"You take the position of the person you passed: second place."}
+  ]
+];
+
+/* -------------------- DAILY QUESTION SETS -------------------- */
+
+const dailyBrainSets = [
+  [
+    {q:"Which shape has three sides?",a:["Square","Triangle","Circle","Rectangle"],correct:1,why:"A triangle has three sides."},
+    {q:"What is 9 + 6?",a:["13","14","15","16"],correct:2,why:"9 + 6 = 15."},
+    {q:"Which animal is known for its black-and-white stripes?",a:["Zebra","Tiger","Giraffe","Elephant"],correct:0,why:"Zebras are known for their black-and-white stripes."},
+    {q:"What is the opposite of 'ancient'?",a:["Old","Historic","Modern","Dusty"],correct:2,why:"Modern means relating to the present or recent times."},
+    {q:"How many sides does a hexagon have?",a:["5","6","7","8"],correct:1,why:"A hexagon has six sides."}
+  ],
+  [
+    {q:"What is 7 × 4?",a:["21","24","28","32"],correct:2,why:"Seven groups of four equal 28."},
+    {q:"Which planet is known as the Red Planet?",a:["Venus","Mars","Jupiter","Neptune"],correct:1,why:"Iron-rich dust gives Mars its reddish appearance."},
+    {q:"Which word is a synonym for 'happy'?",a:["Joyful","Sleepy","Angry","Tiny"],correct:0,why:"Joyful means feeling or expressing happiness."},
+    {q:"How many minutes are in one hour?",a:["30","45","60","100"],correct:2,why:"One hour contains 60 minutes."},
+    {q:"Which one is a primary color in traditional painting?",a:["Green","Purple","Orange","Red"],correct:3,why:"Red is one of the traditional primary paint colors."}
+  ],
+  [
+    {q:"What is half of 50?",a:["15","20","25","30"],correct:2,why:"50 divided by 2 equals 25."},
+    {q:"Which animal is a mammal?",a:["Frog","Dolphin","Crocodile","Trout"],correct:1,why:"Dolphins are mammals that breathe air and nurse their young."},
+    {q:"What is the plural of 'mouse' when referring to the animal?",a:["Mouses","Mouse","Mice","Meese"],correct:2,why:"The standard plural of the animal mouse is mice."},
+    {q:"Which season generally follows spring?",a:["Winter","Autumn","Summer","Monsoon everywhere"],correct:2,why:"In the usual four-season calendar, summer follows spring."},
+    {q:"How many degrees are in a right angle?",a:["45","90","180","360"],correct:1,why:"A right angle measures 90 degrees."}
+  ]
+];
+
+const quizInfo = {
+  personality:{title:"🦄 Your Vibe Check",questions:personalityQuestions},
+  friendship:{title:"👯 Friendship Energy",questions:friendshipQuestions},
+  chaos:{title:"🌪️ Chaos Meter",questions:chaosQuestions},
+  snack:{title:"🍕 Snack Personality",questions:snackQuestions},
+  brain:{title:"🧠 Brain Bounce",questions:null},
+  daily:{title:"🌟 Daily Pop Quiz",questions:null}
+};
+
+/* -------------------- STATE & LOCAL STORAGE -------------------- */
+
+let activeType = null;
+let activeQuestions = [];
+let currentIndex = 0;
+let answers = [];
+let soundOn = true;
+let audioContext = null;
+let lastResultText = "";
+let toastTimer = null;
+
+const STORE = {
+  best:"qp_best_brain",
+  daily:"qp_daily_completed",
+  plays:"qp_total_plays"
+};
+
+function readStore(key,fallback){
+  try{
+    const value=localStorage.getItem(key);
+    return value===null?fallback:JSON.parse(value);
+  }catch(error){
+    return fallback;
+  }
+}
+
+function writeStore(key,value){
+  try{
+    localStorage.setItem(key,JSON.stringify(value));
+  }catch(error){
+    // Gameplay continues if browser storage is unavailable.
+  }
+}
+
+function dateKey(date=new Date()){
+  return date.getFullYear()+"-"+
+    String(date.getMonth()+1).padStart(2,"0")+"-"+
+    String(date.getDate()).padStart(2,"0");
+}
+
+function dayIndex(date=new Date()){
+  const n=Number(dateKey(date).replaceAll("-",""));
+  return n%3;
+}
+
+function refreshHome(){
+  $("bestScore").textContent=readStore(STORE.best,0);
+  $("year").textContent=new Date().getFullYear();
+
+  const completed=readStore(STORE.daily,"");
+  $("dailyStatus").textContent=completed===dateKey()
+    ? "✅ Today's challenge completed on this device!"
+    : "Your daily completion is saved on this device.";
+
+  $("dailyDescription").textContent=
+    "Today's challenge: "+
+    new Date().toLocaleDateString(undefined,{
+      weekday:"long",month:"short",day:"numeric"
+    })+". Five quick questions.";
+}
+
+refreshHome();
+
+/* -------------------- SHUFFLE HELPERS -------------------- */
+
+/* Fisher–Yates shuffle. It does not modify the original array. */
+function shuffleArray(items){
+  const shuffled=[...items];
+
+  for(let i=shuffled.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];
+  }
+
+  return shuffled;
+}
+
+/*
+  Prepare a separate copy of each question.
+  Brain answers are shuffled together with their correctness mapping.
+  Personality answer text stays paired with its result category.
+*/
+function prepareQuestion(question,isBrain){
+  const copy={
+    ...question,
+    a:question.a.map(answer=>
+      Array.isArray(answer)?[...answer]:answer
+    )
+  };
+
+  if(isBrain){
+    const choices=copy.a.map((answer,index)=>({
+      answer,
+      wasCorrect:index===copy.correct
+    }));
+
+    const shuffledChoices=shuffleArray(choices);
+
+    copy.a=shuffledChoices.map(choice=>choice.answer);
+    copy.correct=shuffledChoices.findIndex(choice=>choice.wasCorrect);
+  }else{
+    copy.a=shuffleArray(copy.a);
+  }
+
+  return copy;
+}
+
+/* -------------------- QUIZ CONTROLS -------------------- */
+
+function scrollToQuizzes(){
+  $("quizzes").scrollIntoView({behavior:"smooth",block:"start"});
+  playTone(520);
+}
+
+function closeQuiz(){
+  $("quizBackdrop").classList.add("hidden");
+}
+
+function startQuiz(type){
+  if(!quizInfo[type]){
+    showToast("Sorry, that quiz could not be opened.");
+    return;
+  }
+
+  const isBrain=type==="brain"||type==="daily";
+  let sourceQuestions;
+
+  if(type==="brain"){
+    sourceQuestions=brainSets[dayIndex()];
+  }else if(type==="daily"){
+    sourceQuestions=dailyBrainSets[dayIndex()];
+  }else{
+    sourceQuestions=quizInfo[type].questions;
+  }
+
+  if(!Array.isArray(sourceQuestions)||sourceQuestions.length===0){
+    showToast("This quiz is not available right now.");
+    return;
+  }
+
+  activeType=type;
+  currentIndex=0;
+  answers=[];
+
+  // Shuffle answer options first, then shuffle question order.
+  activeQuestions=shuffleArray(
+    sourceQuestions.map(question=>prepareQuestion(question,isBrain))
+  );
+
+  $("modalTitle").textContent=quizInfo[type].title;
+  $("quizBackdrop").classList.remove("hidden");
+
+  renderQuestion();
+  playTone(620);
+}
+
+/* -------------------- QUESTION DISPLAY -------------------- */
+
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,char=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[char]);
+}
+
+function renderQuestion(){
+  const q=activeQuestions[currentIndex];
+  const total=activeQuestions.length;
+  const isBrain=activeType==="brain"||activeType==="daily";
+  const picked=answers[currentIndex];
+
+  $("quizContent").innerHTML=`
+    <div class="progress-wrap" aria-label="Quiz progress">
+      <div class="progress-bar" style="width:${(currentIndex/total)*100}%"></div>
+    </div>
+
+    <div class="question-meta">
+      <span>QUESTION ${currentIndex+1} OF ${total}</span>
+      <span>${isBrain?"🧠 BRAIN MODE":"✨ VIBE MODE"}</span>
+    </div>
+
+    <h3 class="question-text">${escapeHTML(q.q)}</h3>
+
+    <div class="answer-list">
+      ${q.a.map((answer,index)=>{
+        const label=isBrain?answer[0]||answer:
+          answer[0];
+
+        return `
+          <button type="button"
+            class="answer-option ${picked===index?"selected":""}"
+            data-answer="${index}">
+            <span class="answer-letter">
+              ${isBrain?String.fromCharCode(65+index):
+                ["🌈","⭐","💫","🎈"][index]}
+            </span>
+            <span>${escapeHTML(label)}</span>
+          </button>`;
+      }).join("")}
+    </div>
+
+    <div class="quiz-footer">
+      <button class="secondary-btn" id="backBtn" type="button"
+        ${currentIndex===0?"disabled":""}>← Back</button>
+      <button class="primary-btn" id="nextBtn" type="button"
+        ${picked===undefined?"disabled":""}>
+        ${currentIndex===total-1?"See my result! 🎉":"Next →"}
+      </button>
+    </div>`;
+
+  $("quizContent").querySelectorAll("[data-answer]").forEach(button=>{
+    button.addEventListener("click",()=>{
+      answers[currentIndex]=Number(button.dataset.answer);
+      playTone(450+Number(button.dataset.answer)*100);
+      renderQuestion();
+    });
+  });
+
+  $("backBtn").addEventListener("click",()=>{
+    if(currentIndex>0){
+      currentIndex--;
+      renderQuestion();
+      playTone(330);
+    }
+  });
+
+  $("nextBtn").addEventListener("click",()=>{
+    if(answers[currentIndex]===undefined)return;
+
+    if(currentIndex<total-1){
+      currentIndex++;
+      renderQuestion();
+      playTone(550);
+    }else{
+      showResult();
+    }
+  });
+}
+
+/* -------------------- RESULT LOGIC -------------------- */
+
+function showResult(){
+  const isBrain=activeType==="brain"||activeType==="daily";
+  let result;
+  let score=0;
+
+  if(isBrain){
+    score=answers.reduce((total,answer,index)=>
+      total+(answer===activeQuestions[index].correct?1:0),0);
+
+    const percent=Math.round(score/activeQuestions.length*100);
+
+    const brainResult=percent===100
+      ?{
+        name:"Galaxy Brain!",
+        emoji:"🚀",
+        desc:"A perfect run! Your brain just did a victory dance. Ready for a new challenge?"
+      }
+      :percent>=60
+      ?{
+        name:"Brain Spark!",
+        emoji:"⚡",
+        desc:"Nice work! Your brain cells showed up and brought snacks. Keep those thinking skills bouncing."
+      }
+      :percent>=40
+      ?{
+        name:"Curious Cookie",
+        emoji:"🍪",
+        desc:"You're warming up! Every puzzle is a chance to spot a new pattern. Try another round and beat your score."
+      }
+      :{
+        name:"Brain in Pajamas",
+        emoji:"😴",
+        desc:"Your brain may still be loading, and that's okay. Give it another go when you're ready!"
+      };
+
+    result={
+      ...brainResult,
+      stat:`${score} / ${activeQuestions.length} correct · ${percent}%`
+    };
+
+    const previousBest=readStore(STORE.best,0);
+    if(score>previousBest)writeStore(STORE.best,score);
+
+    if(activeType==="daily"){
+      writeStore(STORE.daily,dateKey());
+    }
+
+    refreshHome();
+  }else{
+    const totals=[0,0,0,0];
+
+    answers.forEach((answer,index)=>{
+      const category=activeQuestions[index].a[answer][1];
+      totals[category]++;
+    });
+
+    const highest=Math.max(...totals);
+    const tiedCategories=totals
+      .map((value,index)=>value===highest?index:-1)
+      .filter(index=>index!==-1);
+
+    let winner=tiedCategories[0];
+
+    // Stable tie-break based on the first chosen answer if it is tied.
+    const firstCategory=activeQuestions[0].a[answers[0]][1];
+    if(tiedCategories.includes(firstCategory)){
+      winner=firstCategory;
+    }
+
+    const source=activeType==="personality"
+      ?personalityResults
+      :activeType==="friendship"
+      ?friendshipResults
+      :activeType==="chaos"
+      ?chaosResults
+      :snackResults;
+
+    result={
+      ...source[winner],
+      stat:"Your result is just for fun!"
+    };
+  }
+
+  lastResultText=
+    `My QuizzyPop result: ${result.name} ${result.emoji}\n`+
+    `${result.desc}\n`+
+    `Play funny quizzes and brain challenges at ${location.href}`;
+
+  writeStore(STORE.plays,readStore(STORE.plays,0)+1);
+
+  $("quizContent").innerHTML=`
+    <div class="progress-wrap">
+      <div class="progress-bar" style="width:100%"></div>
+    </div>
+
+    <div class="result-box">
+      <span class="result-emoji">${result.emoji}</span>
+      <div class="result-kicker">YOUR QUIZZYPOP RESULT</div>
+      <h2 class="result-title">${escapeHTML(result.name)}</h2>
+      <p class="result-description">${escapeHTML(result.desc)}</p>
+      <div class="result-stat">${escapeHTML(result.stat)}</div>
+
+      <div class="result-actions">
+        <button class="primary-btn" id="shareBtn" type="button">📤 Share result</button>
+        <button class="secondary-btn" id="copyBtn" type="button">📋 Copy result</button>
+        <button class="secondary-btn" id="againBtn" type="button">🔄 Play again</button>
+      </div>
+
+      <div class="score-line">
+        ✨ ${isBrain?"Challenge complete!":"Thanks for playing!"}
+      </div>
+    </div>`;
+
+  $("shareBtn").addEventListener("click",shareResult);
+  $("copyBtn").addEventListener("click",copyResult);
+  $("againBtn").addEventListener("click",()=>startQuiz(activeType));
+
+  playTone(720);
+  makeConfetti();
+}
+
+/* -------------------- SHARE & COPY -------------------- */
+
+async function shareResult(){
+  const shareData={
+    title:"My QuizzyPop Result",
+    text:lastResultText,
+    url:location.protocol.startsWith("http")?location.href:undefined
+  };
+
+  try{
+    if(navigator.share){
+      await navigator.share(shareData);
+      showToast("Share menu opened! 🎉");
+    }else{
+      await copyResult();
+    }
+  }catch(error){
+    if(error&&error.name==="AbortError")return;
+    await copyResult();
+  }
+}
+
+async function copyResult(){
+  const textToCopy=lastResultText;
+
+  try{
+    if(navigator.clipboard&&window.isSecureContext){
+      await navigator.clipboard.writeText(textToCopy);
+    }else{
+      const temp=document.createElement("textarea");
+      temp.value=textToCopy;
+      temp.style.position="fixed";
+      temp.style.opacity="0";
+      document.body.appendChild(temp);
+      temp.select();
+
+      const copied=document.execCommand("copy");
+      temp.remove();
+
+      if(!copied)throw new Error("Copy not supported");
+    }
+
+    showToast("Result copied! Share it with your friends. 💜");
+  }catch(error){
+    showToast("Copy isn't supported here. Try selecting and copying the result.");
+  }
+}
+
+/* -------------------- ANIMATIONS & TOASTS -------------------- */
+
+function makeConfetti(){
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+
+  const colors=["#7357ff","#ff83bd","#ffda67","#8debd1","#8bc8ff"];
+
+  for(let i=0;i<35;i++){
+    const piece=document.createElement("i");
+    piece.className="confetti-piece";
+    piece.style.left=Math.random()*100+"vw";
+    piece.style.background=colors[i%colors.length];
+    piece.style.animationDelay=(Math.random()*.8)+"s";
+    piece.style.transform=`rotate(${Math.random()*180}deg)`;
+    document.body.appendChild(piece);
+
+    setTimeout(()=>piece.remove(),3800);
+  }
+}
+
+function showToast(message){
+  const toast=$("toast");
+  toast.textContent=message;
+  toast.classList.remove("hidden");
+
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>toast.classList.add("hidden"),2600);
+}
+
+/* -------------------- SOUND -------------------- */
+
+function playTone(frequency=500){
+  if(!soundOn)return;
+
+  try{
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;
+    if(!AudioCtx)return;
+
+    if(!audioContext)audioContext=new AudioCtx();
+    if(audioContext.state==="suspended")audioContext.resume();
+
+    const oscillator=audioContext.createOscillator();
+    const gain=audioContext.createGain();
+
+    oscillator.type="sine";
+    oscillator.frequency.value=frequency;
+
+    gain.gain.setValueAtTime(.0001,audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.07,audioContext.currentTime+.015);
+    gain.gain.exponentialRampToValueAtTime(.0001,audioContext.currentTime+.13);
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime+.14);
+  }catch(error){
+    // Sound is optional.
+  }
+}
+
+$("soundBtn").addEventListener("click",()=>{
+  soundOn=!soundOn;
+
+  $("soundBtn").textContent=soundOn?"🔊":"🔇";
+  $("soundBtn").setAttribute(
+    "aria-label",soundOn?"Turn sound off":"Turn sound on"
+  );
+
+  if(soundOn)playTone(650);
+  showToast(soundOn?"Sound is on":"Sound is off");
+});
+
+/* -------------------- SCORE SUMMARY -------------------- */
+
+$("scoresBtn").addEventListener("click",()=>{
+  const best=readStore(STORE.best,0);
+  const plays=readStore(STORE.plays,0);
+  const daily=readStore(STORE.daily,"")===dateKey()
+    ?"Completed today"
+    :"Not completed today";
+
+  showToast(`Best brain score: ${best}/5 · Plays: ${plays} · Daily: ${daily}`);
+});
+
+/* -------------------- MODAL CONTROLS -------------------- */
+
+$("quizBackdrop").addEventListener("click",event=>{
+  if(event.target===$("quizBackdrop"))closeQuiz();
+});
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape")closeQuiz();
+});
+
+/* Local date-based daily challenge; not a global event. */
+$("dailyTitle").textContent="The Daily Pop Challenge";
+refreshHome();
+</script>
+</body>
+</html>
